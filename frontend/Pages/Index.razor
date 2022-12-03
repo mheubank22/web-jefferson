@@ -1,9 +1,59 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>To do List</PageTitle>
+<div class="add-form">
+<BSLabel>To do List: </BSLabel>
 
-<h1>Hello, world!</h1>
+<BSInput @bind-Value="description"
+placeholder="Escreva seu item a fazer ..."
+InputType="InputType.TextArea"/>
 
-Welcome to your new app.
+<BSLabel>Para:</BSLabel>
+<BSInput
+    InputType="InputType.DateTimeLocal"
+   @bind-Value="deadline" />
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <BSButton Color="BSColor.Dark"@onclick= "OnAdd">Adicionar</BSButton>
+    </div>
+
+    <div class="add-form">
+
+<BSAccordion>
+    @foreach (var todo in List)
+    {
+        
+    <BSAccordionItem>
+        <Header>@todo.Descricao</Header>
+        <Content>
+           <BSInputCheckbox 
+           Value="@(todo.Feito)"> 
+           Está feito
+
+           </BSInputCheckbox>
+          
+        </Content>
+    </BSAccordionItem>
+    }
+    </BSAccordion>
+
+</div> 
+
+    @code{
+        List<ToDoElement> List = new List<ToDoElement>();
+        string description = "";
+        DateTime deadline = DateTime.Now;
+
+        public void OnAdd()
+        {
+ToDoElement element = new ToDoElement();
+element.Descricao = description;
+
+element.prazo= deadline;
+element.Feito = false;
+List.Add(element);
+
+description = "";
+deadline = DateTime.Now;
+StateHasChanged();
+        }
+    }
